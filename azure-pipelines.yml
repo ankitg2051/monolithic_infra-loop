@@ -25,7 +25,7 @@ steps:
       backendServiceArm: 'goyal-app'
       backendAzureRmStorageAccountName: 'storegoyal1121'
       backendAzureRmContainerName: 'cont1'
-      backendAzureRmKey: 'dev.terraform.tfvars'
+      backendAzureRmKey: 'terraform.tfvars'
   
   - task: TerraformTask@5
     displayName: terraform plan
