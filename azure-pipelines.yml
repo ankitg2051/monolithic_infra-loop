@@ -38,20 +38,20 @@ steps:
       commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
-  - task: TerraformTask@5
-    displayName: terraform apply
-    inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
-      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-      environmentServiceNameAzureRM: 'goyal-app'
+  # - task: TerraformTask@5
+  #   displayName: terraform apply
+  #   inputs:
+  #     provider: 'azurerm'
+  #     command: 'apply'
+  #     workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+  #     commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+  #     environmentServiceNameAzureRM: 'goyal-app'
 
-  - task: TerraformTask@5
-    displayName: terraform destroy
-    inputs:
-      provider: 'azurerm'
-      command: 'destroy'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
-      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-      environmentServiceNameAzureRM: 'goyal-app'
+  # - task: TerraformTask@5
+  #   displayName: terraform destroy
+  #   inputs:
+  #     provider: 'azurerm'
+  #     command: 'destroy'
+  #     workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+  #     commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+  #     environmentServiceNameAzureRM: 'goyal-app'
