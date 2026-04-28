@@ -10,7 +10,7 @@ steps:
   - task: TerraformInstaller@1
     displayName: terraform install
     inputs:
-      terraformVersion: 'latest'
+      terraformVersion: '1.14.4'
   
   - task: TerraformTask@5
     displayName: terraform init
