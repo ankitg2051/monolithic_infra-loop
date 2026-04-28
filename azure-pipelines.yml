@@ -1,11 +1,7 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   branches:
     include:
+      - main
       - develop
 
 pool: goyal-agent
@@ -21,16 +17,10 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
       backendServiceArm: 'goyal-app'
       backendAzureRmStorageAccountName: 'storegoyal1121'
       backendAzureRmContainerName: 'cont1'
       backendAzureRmKey: 'terraform.tfvars'
+
   
-  - task: TerraformTask@5
-    displayName: terraform plan
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
-      environmentServiceNameAzureRM: 'goyal-app'
