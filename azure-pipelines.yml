@@ -34,7 +34,7 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
       commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
@@ -43,7 +43,7 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
       commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
@@ -52,5 +52,5 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'destroy'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
       environmentServiceNameAzureRM: 'goyal-app'
