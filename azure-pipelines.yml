@@ -52,16 +52,16 @@ jobs:
         commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
         environmentServiceNameAzureRM: 'goyal-app'
 
-- job: CD
-  steps:   
-    - task: TerraformTask@5
-      displayName: terraform apply
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
-        commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-        environmentServiceNameAzureRM: 'goyal-app'
+# - job: CD
+#   steps:   
+#     # - task: TerraformTask@5
+#     #   displayName: terraform apply
+#     #   inputs:
+#     #     provider: 'azurerm'
+#     #     command: 'apply'
+#     #     workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+#     #     commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+#     #     environmentServiceNameAzureRM: 'goyal-app'
 
     # - task: TerraformTask@5
     #   displayName: terraform destroy
