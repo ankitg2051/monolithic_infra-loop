@@ -23,12 +23,19 @@ steps:
       backendAzureRmContainerName: 'cont1'
       backendAzureRmKey: 'terraform.tfstate'
 
+  - task: DownloadSecureFile@1
+    displayName: download secure files
+    name: tfvarsFile
+    inputs:
+      secureFile: 'terraform.tfvars'
+
   - task: TerraformTask@5
     displayName: terraform plan
     inputs:
       provider: 'azurerm'
       command: 'plan'
       workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
   - task: TerraformTask@5
@@ -37,7 +44,7 @@ steps:
       provider: 'azurerm'
       command: 'apply'
       workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
-      commandOptions: '--auto-approve'
+      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
   - task: TerraformTask@5
