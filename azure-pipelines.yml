@@ -25,7 +25,7 @@ steps:
 
   - task: trivy@2
     inputs:
-      version: '0.50.1'
+      version: 'latest'
       type: 'filesystem'
       target: '$(System.DefaultWorkingDirectory)\Environment\dev'
       scanners: 'misconfig, secret'
