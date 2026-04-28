@@ -53,4 +53,5 @@ steps:
       provider: 'azurerm'
       command: 'destroy'
       workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      commandOptions: '--auto-approve'
       environmentServiceNameAzureRM: 'goyal-app'
