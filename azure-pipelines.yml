@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pool: goyal-agent
+
+steps:
+  - task: TerraformInstaller@1
+    displayName: terraform install
+    inputs:
+      terraformVersion: '1.14.4'
+  
+  - task: TerraformTask@5
+    displayName: terraform init
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      backendServiceArm: 'goyal-app'
+      backendAzureRmStorageAccountName: 'storegoyal1121'
+      backendAzureRmContainerName: 'cont1'
+      backendAzureRmKey: 'terraform.tfstate'
+
+  - task: DownloadSecureFile@1
+    displayName: download secure files
+    name: tfvarsFile
+    inputs:
+      secureFile: 'terraform.tfvars'
+
+  - task: TerraformTask@5
+    displayName: terraform plan
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
+      environmentServiceNameAzureRM: 'goyal-app'
+
+  - task: TerraformTask@5
+    displayName: terraform apply
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+      environmentServiceNameAzureRM: 'goyal-app'
+
+  - task: TerraformTask@5
+    displayName: terraform destroy
+    inputs:
+      provider: 'azurerm'
+      command: 'destroy'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+      environmentServiceNameAzureRM: 'goyal-app'
