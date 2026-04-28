@@ -23,4 +23,24 @@ steps:
       backendAzureRmContainerName: 'cont1'
       backendAzureRmKey: 'terraform.tfvars'
 
-  
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      environmentServiceNameAzureRM: 'goyal-app'
+
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      commandOptions: '--auto-approve'
+      environmentServiceNameAzureRM: 'goyal-app'
+
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'destroy'
+      workingDirectory: '$(System.DefaultWorkingDirectory)\Enviornment\dev'
+      environmentServiceNameAzureRM: 'goyal-app'
