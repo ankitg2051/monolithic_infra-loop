@@ -38,6 +38,16 @@ steps:
       commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
 
+  - task: trivy@2
+    inputs:
+      version: 'latest'
+      type: 'filesystem'
+      target: '$(System.DefaultWorkingDirectory)\Environment\dev'
+      scanners: 'misconfig, secret'
+      severities: 'MEDIUM, HIGH, CRITICAL'
+      failOnSeverityThreshold: 'CRITICAL'
+      reports: 'html'
+      publish: true
   - task: TerraformTask@5
     displayName: terraform apply
     inputs:
