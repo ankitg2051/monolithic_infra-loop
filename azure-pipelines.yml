@@ -53,5 +53,5 @@ steps:
       provider: 'azurerm'
       command: 'destroy'
       workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
-      commandOptions: '--auto-approve'
+      commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
       environmentServiceNameAzureRM: 'goyal-app'
