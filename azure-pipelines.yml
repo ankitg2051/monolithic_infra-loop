@@ -6,21 +6,26 @@ trigger:
 
 pool: goyal-agent
 
-jobs:
-  - job: CI
 
+
+jobs:
+
+  - job: CI
+    variables:
+    - name: WorkDir
+      value: '$(System.DefaultWorkingDirectory)\Environment\dev'
     steps:
       - task: TerraformInstaller@1
         displayName: terraform install
         inputs:
           terraformVersion: '1.14.4'
-      
+
       - task: TerraformTask@5
-        displayName: terraform init
+        displayName: terraform init       
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           backendServiceArm: 'goyal-app'
           backendAzureRmStorageAccountName: 'storegoyal1121'
           backendAzureRmContainerName: 'cont1'
@@ -37,7 +42,7 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
 
@@ -65,7 +70,7 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           backendServiceArm: 'goyal-app'
           backendAzureRmStorageAccountName: 'storegoyal1121'
           backendAzureRmContainerName: 'cont1'
@@ -82,7 +87,7 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
 
@@ -101,7 +106,7 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
 
@@ -110,6 +115,6 @@ jobs:
         inputs:
           provider: 'azurerm'
           command: 'destroy'
-          workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          workingDirectory: '$(WorkDir)'
           commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
