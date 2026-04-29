@@ -6,19 +6,17 @@ trigger:
 
 pool: goyal-agent
 
+variables:
+  WorkDir: '$(System.DefaultWorkingDirectory)\Environment\dev'
 
 jobs:
-
   - job: CI
-    variables:
-    - name: WorkDir
-      value: '$(System.DefaultWorkingDirectory)\Environment\dev'
+
     steps:
       - task: TerraformInstaller@1
         displayName: terraform install
         inputs:
           terraformVersion: '1.14.4'
-
       - task: TerraformTask@5
         displayName: terraform init       
         inputs:
@@ -49,7 +47,7 @@ jobs:
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          target: '$(WorkDir)'
           scanners: 'misconfig, secret'
           severities: 'MEDIUM, HIGH, CRITICAL'
           failOnSeverityThreshold: 'CRITICAL'
@@ -57,12 +55,10 @@ jobs:
           publish: true
 
   - job: CD
-    variables:
-    - name: WorkDir
-      value: '$(System.DefaultWorkingDirectory)\Environment\dev'
+    dependsOn: CI
+    condition: succeeded()
 
     steps:
-
       - task: TerraformInstaller@1
         displayName: terraform install
         inputs:
@@ -98,7 +94,7 @@ jobs:
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: '$(System.DefaultWorkingDirectory)\Environment\dev'
+          target: '$(WorkDir)'
           scanners: 'misconfig, secret'
           severities: 'MEDIUM, HIGH, CRITICAL'
           failOnSeverityThreshold: 'CRITICAL'
