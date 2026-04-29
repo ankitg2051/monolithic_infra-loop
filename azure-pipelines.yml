@@ -7,7 +7,6 @@ trigger:
 pool: goyal-agent
 
 
-
 jobs:
 
   - job: CI
@@ -58,6 +57,10 @@ jobs:
           publish: true
 
   - job: CD
+    variables:
+    - name: WorkDir
+      value: '$(System.DefaultWorkingDirectory)\Environment\dev'
+
     steps:
 
       - task: TerraformInstaller@1
