@@ -12,8 +12,17 @@ stages:
   - stage: Local_stage
 
     jobs:
-      - job: CI
 
+      - job: manual_validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'ankitg.2051@gmail.com'
+            approvers: 'ankitg.2051@gmail.com'
+
+      - job: CI
+        dependsOn: manual_validation
         steps:
           - task: TerraformInstaller@1
             displayName: terraform install
