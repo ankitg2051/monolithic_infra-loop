@@ -9,20 +9,10 @@ variables:
   WorkDir: '$(System.DefaultWorkingDirectory)\Environment\dev'
 
 stages:
-  - stage: Local_stage
+  - stage: CI
 
     jobs:
-
-      - job: manual_validation
-        pool: server
-        steps:
-        - task: ManualValidation@1
-          inputs:
-            notifyUsers: 'ankitg.2051@gmail.com'
-            approvers: 'ankitg.2051@gmail.com'
-
       - job: CI
-        dependsOn: manual_validation
         steps:
           - task: TerraformInstaller@1
             displayName: terraform install
@@ -67,9 +57,18 @@ stages:
 
 
   - stage: Deploy
-    dependsOn: local_stage
+    dependsOn: CI
     condition: succeeded()
     jobs:
+
+      - job: manual_validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'ankitg.2051@gmail.com'
+            approvers: 'ankitg.2051@gmail.com'
+
       - job: CD
 
         steps:
@@ -94,15 +93,6 @@ stages:
             name: tfvarsFile
             inputs:
               secureFile: 'terraform.tfvars'
-
-          # - task: TerraformTask@5
-          #   displayName: terraform plan
-          #   inputs:
-          #     provider: 'azurerm'
-          #     command: 'plan'
-          #     workingDirectory: '$(WorkDir)'
-          #     commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
-          #     environmentServiceNameAzureRM: 'goyal-app'
 
           - task: trivy@2
             inputs:
