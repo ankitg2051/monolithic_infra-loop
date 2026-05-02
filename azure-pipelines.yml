@@ -39,8 +39,6 @@ stages:
         workingDirectory: '$(WorkDir)'
         commandOptions: '-var-file="$(tfvarsFile.secureFilePath)"'
         environmentServiceNameAzureRM: 'goyal-app'
-
-
     - task: trivy@2
       inputs:
         version: 'latest'
@@ -54,8 +52,7 @@ stages:
 
 
 - stage: Deploy
-  dependsOn:
-  - local_stage
+  dependsOn: local_stage
   condition: succeeded()
   jobs:
   - job: CD
@@ -101,20 +98,40 @@ stages:
         approvers: 'ankitg.2051@gmail.com'  
 
   - job: infra_creation
+    dependsOn: manual_validation
     steps:
-      - task: TerraformTask@5
-        displayName: terraform apply
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(WorkDir)'
-          commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-          environmentServiceNameAzureRM: 'goyal-app'
-      - task: TerraformTask@5
-        displayName: terraform destroy
-        inputs:
-          provider: 'azurerm'
-          command: 'destroy'
-          workingDirectory: '$(WorkDir)'
-          commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-          environmentServiceNameAzureRM: 'goyal-app'
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.14.4'
+
+    - task: TerraformTask@5
+      displayName: terraform init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(WorkDir)'
+        backendServiceArm: 'goyal-app'
+        backendAzureRmStorageAccountName: 'storegoyal1121'
+        backendAzureRmContainerName: 'cont1'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: DownloadSecureFile@1
+      name: tfvarsFile
+      inputs:
+        secureFile: 'terraform.tfvars'
+
+    - task: TerraformTask@5
+      displayName: terraform apply
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(WorkDir)'
+        commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+        environmentServiceNameAzureRM: 'goyal-app'
+    - task: TerraformTask@5
+      displayName: terraform destroy
+      inputs:
+        provider: 'azurerm'
+        command: 'destroy'
+        workingDirectory: '$(WorkDir)'
+        commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
+        environmentServiceNameAzureRM: 'goyal-app'
