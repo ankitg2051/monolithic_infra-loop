@@ -8,3 +8,9 @@ module "storage_acc" {
   depends_on = [module.resources]
 }
 
+
+module "app_services" {
+  source = "../../Modules/app_services"
+  aps    = var.aps
+  depends_on = [module.resources]
+}
