@@ -90,11 +90,3 @@ stages:
           workingDirectory: '$(WorkDir)'
           commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
-      - task: TerraformTask@5
-        displayName: terraform destroy
-        inputs:
-          provider: 'azurerm'
-          command: 'destroy'
-          workingDirectory: '$(WorkDir)'
-          commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
-          environmentServiceNameAzureRM: 'goyal-app'
