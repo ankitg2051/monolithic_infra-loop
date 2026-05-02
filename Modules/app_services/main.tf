@@ -16,6 +16,8 @@ resource "azurerm_linux_web_app" "app" {
   location            = each.value.location
   resource_group_name = each.value.resource_group_name
   service_plan_id     = azurerm_service_plan.pla[each.key].id
+  depends_on = [azurerm_service_plan.pla]
+
 
   site_config {
     application_stack {
