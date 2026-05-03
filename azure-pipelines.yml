@@ -13,9 +13,10 @@ variables:
 - name: WorkDir
   value: '$(System.DefaultWorkingDirectory)\Environment\dev'
 stages:
-- stage: Local_stage
+- stage: Infra_part
+  condition: eq(variables['Build.Reason'], 'Manual')
   jobs:
-  - job: CI
+  - job: Dev_env
     steps:
     - task: TerraformInstaller@1
       displayName: terraform install
@@ -55,12 +56,9 @@ stages:
         reports: 'html'
         publish: true
 
-
-- stage: Deploy
-  dependsOn: local_stage
-  condition: succeeded()
-  jobs:
   - job: manual_validation
+    dependsOn: Dev_env
+    condition: succeeded()
     pool:
       name: server
     steps:
@@ -71,6 +69,7 @@ stages:
 
   - job: infra_creation
     dependsOn: manual_validation
+    condition: succeeded()
     steps:
       - task: TerraformTask@5
         displayName: terraform init
@@ -95,3 +94,20 @@ stages:
           workingDirectory: '$(WorkDir)'
           commandOptions: '--auto-approve -var-file="$(tfvarsFile.secureFilePath)"'
           environmentServiceNameAzureRM: 'goyal-app'
+
+
+- stage: Build_artifacts
+  jobs:
+    - job: building
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '8.x'
+        
+        - script: |
+            dotnet restore
+            dotnet build --configuration Release
+            dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)
+
+    
