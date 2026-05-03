@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DevOps Static Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>DevOps Deployment Dashboard</h1>
+    <p class="subtitle">Static site deployed via Azure DevOps Pipeline</p>
+
+    <div class="cards">
+        <div class="card success">
+            <h3>Environment</h3>
+            <p id="env">Production</p>
+        </div>
+
+        <div class="card info">
+            <h3>Pipeline</h3>
+            <p id="pipeline">Idle</p>
+        </div>
+
+        <div class="card warning">
+            <h3>Last Deployment</h3>
+            <p id="deployTime">Not triggered</p>
+        </div>
+    </div>
+
+    <button onclick="runPipeline()">Run Pipeline</button>
+
+    <footer>
+        Azure App Service · Static Hosting · CI/CD
+    </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
