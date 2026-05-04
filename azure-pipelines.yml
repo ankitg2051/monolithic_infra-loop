@@ -117,4 +117,22 @@ stages:
             pathToPublish: '$(Build.ArtifactStagingDirectory)'
             artifactName: 'AnkitBuild'
 
-    
+- stage: deploy_stage
+  dependsOn: Build_artifacts
+  condition: succeeded('Build_artifacts')
+  jobs:
+    - job: deploying
+      steps:
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'AnkitBuild'
+          downloadPath: '$(System.ArtifactsDirectory)'
+      - task: AzureWebApp@1
+        inputs:
+          azureSubscription: 'goyal-app'
+          appType: 'webAppLinux'
+          appName: 'dotnet-static-app-ankitg2051'
+          package: '$(System.ArtifactsDirectory)/AnkitBuild'
+          runtimeStack: 'DOTNETCORE|8.0'
