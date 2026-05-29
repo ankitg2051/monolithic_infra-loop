@@ -6,9 +6,10 @@ trigger:
     include:
       - Environment/**
       - Modules/**
-      
+
 pool:
   name: goyal-agent
+
 variables:
 - name: WorkDir
   value: '$(System.DefaultWorkingDirectory)\Environment\dev'
@@ -18,6 +19,7 @@ stages:
 #   jobs:
 #   - job: Dev_env
 #     steps:
+#     - template: Infro_mono/azure-pipelines.yml
 #     - task: TerraformInstaller@1
 #       displayName: terraform install
 #       inputs:
